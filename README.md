@@ -87,6 +87,7 @@
 1. 前往 [Firebase Console](https://console.firebase.google.com) → **新增專案**
 2. 啟用 **Firestore Database**（建置 → Firestore Database → 建立資料庫）
 3. （建議）啟用 **Authentication**：登入方法選 Email/Password 或 Google
+   > ⚠️ **注意**：目前 app 尚未內建登入 UI。若套用 `firestore.rules` 的 Option A（`if request.auth != null;`），需先自行加上 Firebase Auth 登入畫面才能讀寫資料。若暫時不想實作，可改用更嚴格的做法（僅限本地 dev、不部署公網），**不要**改回 `if true;`。
 4. 專案設定 → 一般設定 → 你的應用程式 → **網頁應用程式** → 複製 Firebase SDK 設定值
 5. 套用安全規則：把 repo 裡的 `firestore.rules` 內容貼到 **Firestore → 規則** 分頁並發布
 
@@ -112,6 +113,7 @@ VITE_FIREBASE_PROJECT_ID=...
 VITE_FIREBASE_STORAGE_BUCKET=...
 VITE_FIREBASE_MESSAGING_SENDER_ID=...
 VITE_FIREBASE_APP_ID=...
+VITE_FIREBASE_MEASUREMENT_ID=...   # 可選，啟用 Google Analytics 才需要
 
 # 展會設定
 VITE_APP_EVENT_NAME=CES            # CES / Computex / IFA / MWC ...
@@ -130,7 +132,8 @@ npm run preview   # 預覽打包結果
 
 #### 4. 部署（選擇你們習慣的）
 - **Firebase Hosting**：`firebase init hosting && firebase deploy`
-- **Vercel / Netlify**：連 GitHub repo 自動部署，記得把 `.env.local` 裡的變數加進平台環境變數
+- **Vercel / Netlify**：連 GitHub repo 自動部署，環境變數加進平台後台
+  > ⚠️ **注意**：這會讓 app 變成 public URL，**Cal.com API Key 會透過瀏覽器 network 請求外洩**（因為 v1 API 走 query string）。只有在「Vercel/Netlify 專案設為 Private、或用 password protection、或放 VPN 後」才建議這樣部署，否則請改用內網環境。
 - **自建伺服器**：把 `dist/` 塞進 nginx 即可
 
 ---

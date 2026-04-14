@@ -87,6 +87,7 @@ This project needs **your own** Firebase backend — it must not share another o
 1. Go to [Firebase Console](https://console.firebase.google.com) → **Add project**
 2. Enable **Firestore Database** (Build → Firestore Database → Create database)
 3. (Recommended) Enable **Authentication** — Email/Password or Google
+   > ⚠️ **Note**: The app currently has no built-in login UI. If you apply Option A in `firestore.rules` (`if request.auth != null;`), you must first wire up a Firebase Auth sign-in flow, or the app won't be able to read/write. If you don't want to implement auth yet, run it locally only — **do not** fall back to `if true;`.
 4. Project Settings → General → Your apps → **Web app** → copy the Firebase SDK config values
 5. Apply security rules: copy the contents of `firestore.rules` from this repo into **Firestore → Rules** and publish
 
@@ -112,6 +113,7 @@ VITE_FIREBASE_PROJECT_ID=...
 VITE_FIREBASE_STORAGE_BUCKET=...
 VITE_FIREBASE_MESSAGING_SENDER_ID=...
 VITE_FIREBASE_APP_ID=...
+VITE_FIREBASE_MEASUREMENT_ID=...   # optional, only needed if using Google Analytics
 
 # Event config
 VITE_APP_EVENT_NAME=CES              # CES / Computex / IFA / MWC ...
@@ -131,6 +133,7 @@ npm run preview   # preview production build
 #### 4. Deploy (pick what your team uses)
 - **Firebase Hosting**: `firebase init hosting && firebase deploy`
 - **Vercel / Netlify**: connect the GitHub repo, add the `.env.local` variables as platform env vars
+  > ⚠️ **Note**: This exposes the app at a public URL, which **leaks `VITE_CAL_API_KEY` through browser network requests** (Cal.com v1 API uses query string). Only use this if the Vercel/Netlify project is set to Private, password-protected, or behind a VPN — otherwise prefer an internal deployment.
 - **Self-hosted**: drop `dist/` into nginx
 
 ---
