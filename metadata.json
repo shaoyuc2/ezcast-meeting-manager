@@ -1,0 +1,5 @@
+{
+  "name": "EZCast Meeting Manager",
+  "description": "A meeting reservation dashboard for trade shows (CES, Computex, etc.). Syncs Cal.com bookings and manages team assignments with Firebase real-time persistence.",
+  "requestFramePermissions": []
+}
